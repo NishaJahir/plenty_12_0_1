@@ -18,7 +18,7 @@ use Novalnet\Services\SettingsService;
 use Plenty\Modules\Frontend\Session\Storage\Contracts\FrontendSessionStorageFactoryContract;
 use Plenty\Modules\Basket\Contracts\BasketRepositoryContract;
 use Plenty\Plugin\Templates\Twig;
-
+use Plenty\Plugin\Log\Loggable;
 /**
  * Class PaymentController
  *
@@ -26,6 +26,7 @@ use Plenty\Plugin\Templates\Twig;
  */
 class PaymentController extends Controller
 { 
+    use Loggable;
     /**
      * @var Request
      */
@@ -247,6 +248,7 @@ class PaymentController extends Controller
         $nnGooglePayDoRedirect = $this->sessionStorage->getPlugin()->getValue('nnGooglePayDoRedirect');
         $this->sessionStorage->getPlugin()->setValue('nnDoRedirect', null);
         $this->sessionStorage->getPlugin()->setValue('nnGooglePayDoRedirect', null);
+        $this->getLogger(__METHOD__)->error('key', $paymentKey);
         if($this->paymentService->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || !empty($nnGooglePayDoRedirect)) {
             if(!empty($paymentResponseData) && !empty($paymentResponseData['result']['redirect_url']) && !empty($paymentResponseData['transaction']['txn_secret'])) {
                 // Transaction secret used for the later checksum verification
