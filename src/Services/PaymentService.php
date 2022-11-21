@@ -335,14 +335,14 @@ class PaymentService
      */
     public function getPaymentData(&$paymentRequestData, $paymentKey)
     {
-        $paymentUrl = ($paymentKey == 'NOVALNET_APPLEPAY') ? NovalnetConstants::PAYGATE_URL : NovalnetConstants::PAYMENT_URL;
+        $paymentUrl = ($paymentKey == 'NOVALNET_APPLEPAY') ? NovalnetConstants::SEAMLESS_PAYMENT_URL : NovalnetConstants::PAYMENT_URL;
         // Sent the payment authorize call to Novalnet server if the authorization is enabled
         if(in_array($paymentKey, ['NOVALNET_SEPA', 'NOVALNET_CC', 'NOVALNET_INVOICE', 'NOVALNET_APPLEPAY', 'NOVALNET_GUARANTEED_INVOICE', 'NOVALNET_GUARANTEED_SEPA', 'NOVALNET_PAYPAL', 'NOVALNET_GOOGLEPAY']) && !empty($this->settingsService->getPaymentSettingsValue('payment_action', strtolower($paymentKey)))) {
             // Limit for the manual on-hold
             $authorizeAmount = $this->settingsService->getPaymentSettingsValue('onhold_amount', strtolower($paymentKey));
             // "Authorization" activated if the manual limit is configured and the order amount exceeds it
             if(empty($authorizeAmount) || (!empty($authorizeAmount) && is_numeric($authorizeAmount) && $paymentRequestData['transaction']['amount'] > $authorizeAmount)) {
-               $paymentUrl = NovalnetConstants::PAYMENT_AUTHORIZE_URL;
+               $paymentUrl = ($paymentKey == 'NOVALNET_APPLEPAY') ? NovalnetConstants::SEAMLESS_PAYMENT_AUTHORIZE_URL : NovalnetConstants::PAYMENT_AUTHORIZE_URL;
             }
         }
         // Send the payment type to Novalnet server
