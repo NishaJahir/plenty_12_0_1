@@ -466,6 +466,8 @@ class PaymentService
         $privateKey = $this->settingsService->getPaymentSettingsValue('novalnet_private_key');
         $paymentResponseData = $this->paymentHelper->executeCurl($paymentRequestData['paymentRequestData'], $paymentRequestData['paymentUrl'], $privateKey);
         $isPaymentSuccess = isset($paymentResponseData['result']['status']) && $paymentResponseData['result']['status'] == 'SUCCESS';
+        $this->getLogger(__METHOD__)->error('Payment Request', $paymentRequestData);
+        $this->getLogger(__METHOD__)->error('Payment Response', $paymentResponseData);
         // Do redirect if the redirect URL is present
         if($isPaymentSuccess && ($this->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || !empty($nnGooglePayDoRedirect))) {
             // Set the payment response in the session for the further processings
