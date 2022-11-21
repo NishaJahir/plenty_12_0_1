@@ -251,6 +251,7 @@ class NovalnetServiceProvider extends ServiceProvider
                                 // Transaction secret used for the later checksum verification
                                 $sessionStorage->getPlugin()->setValue('nnTxnSecret', $paymentResponseData['transaction']['txn_secret']);
                                 $sessionStorage->getPlugin()->setValue('nnDoRedirect', null);
+                                $sessionStorage->getPlugin()->setValue('nnGooglePayDoRedirect', null);
                                 $event->setType('redirectUrl');
                                 $event->setValue($paymentResponseData['result']['redirect_url']);
                             } else {
