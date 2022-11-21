@@ -42,7 +42,7 @@ class Settings extends Model
      */
     public function getTableName(): string
     {
-        return 'Novalnet::settings';
+        return 'Novalnet::Settings';
     }
 
     /**
