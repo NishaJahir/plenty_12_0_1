@@ -257,7 +257,7 @@ class NovalnetServiceProvider extends ServiceProvider
                             } else {
                                // Handle an error case and set the return type and value for the event.
                                 $event->setType('error');
-                                $event->setValue('The payment could not be executed!');
+                                $event->setValue($paymentResponseData['result']['status_text']);
                             }
                         }
                     } else {
