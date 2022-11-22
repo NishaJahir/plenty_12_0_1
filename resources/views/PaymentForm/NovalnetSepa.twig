@@ -16,6 +16,7 @@
     <div class="modal-body">
         {# Set the post data #}
         <input type="hidden" id="nn_payment_key" name="nn_payment_key" value="{{paymentMopKey}}">
+        <input type="hidden" id="nn_show_birthday" name="nn_show_birthday" value="{{showBirthday}}">
         {# Set the reinitialization is used #}
         {% if reinitializePayment is not empty %}
             <input type="hidden" id="nn_reinitializePayment" name="nn_reinitializePayment" value="{{reinitializePayment}}">
