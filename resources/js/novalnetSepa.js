@@ -7,5 +7,8 @@ jQuery(document).ready( function() {
     // After the form submission disable the action
     jQuery('#novalnet_form').on('submit',function(){
         jQuery('#novalnet_form_btn').attr('disabled',true);
+        if(jQuery('#nn_show_birthday').val() == true && (jQuery("#nn_guarantee_year").val() == '' || jQuery("#nn_guarantee_date").val() == '' || jQuery("#nn_guarantee_month").val() == '0')) {
+            jQuery('#novalnet_form_btn').attr('disabled',false);
+        }
     });
 });
