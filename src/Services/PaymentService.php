@@ -470,7 +470,7 @@ class PaymentService
         $this->getLogger(__METHOD__)->error('Payment Request', $paymentRequestData);
         $this->getLogger(__METHOD__)->error('Payment Response', $paymentResponseData);
         // Do redirect if the redirect URL is present
-        if($this->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || !empty($nnGooglePayDoRedirect)) {
+        if($this->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || (!empty($nnGooglePayDoRedirect) && $nnGooglePayDoRedirect == 'true')) {
             // Set the payment response in the session for the further processings
             $this->sessionStorage->getPlugin()->setValue('nnPaymentData', $paymentRequestData['paymentRequestData']);
             return $paymentResponseData;
