@@ -470,7 +470,7 @@ class PaymentService
         $this->getLogger(__METHOD__)->error('Payment Request', $paymentRequestData);
         $this->getLogger(__METHOD__)->error('Payment Response', $paymentResponseData);
         // Do redirect if the redirect URL is present
-        if($isPaymentSuccess && ($this->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || !empty($nnGooglePayDoRedirect))) {
+        if($this->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || !empty($nnGooglePayDoRedirect)) {
             // Set the payment response in the session for the further processings
             $this->sessionStorage->getPlugin()->setValue('nnPaymentData', $paymentRequestData['paymentRequestData']);
             return $paymentResponseData;
@@ -586,14 +586,15 @@ class PaymentService
             $this->sessionStorage->getPlugin()->setValue('novalnetCheckoutToken', $nnPaymentData['transaction']['checkout_token']);
             $this->sessionStorage->getPlugin()->setValue('novalnetCheckoutUrl', $nnPaymentData['transaction']['checkout_js']);
         }
-        // Insert payment response into Novalnet table
-        $this->insertPaymentResponse($nnPaymentData);
+        
         // Update the Order No to the order if the payment before order completion set as 'No' for direct payments
          if(empty($nnOrderCreator) && $this->settingsService->getPaymentSettingsValue('novalnet_order_creation') != true) {
             $paymentResponseData = $this->sendPostbackCall($nnPaymentData);
             $nnPaymentData = array_merge($nnPaymentData, $paymentResponseData);
             $this->sessionStorage->getPlugin()->setValue('nnInvoiceRef', $nnPaymentData['transaction']['invoice_ref']);
         }
+        // Insert payment response into Novalnet table
+        $this->insertPaymentResponse($nnPaymentData);
         // Create a plenty payment to the order
         $this->paymentHelper->createPlentyPayment($nnPaymentData);
     }
