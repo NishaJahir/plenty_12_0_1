@@ -246,7 +246,7 @@ class NovalnetServiceProvider extends ServiceProvider
                     $nnGooglePayDoRedirect = $sessionStorage->getPlugin()->getValue('nnGooglePayDoRedirect');
                     if($settingsService->getPaymentSettingsValue('novalnet_order_creation') == true) {
                         $paymentResponseData = $paymentService->performServerCall();
-                        if($paymentService->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || !empty($nnGooglePayDoRedirect)) {
+                        if($paymentService->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || (!empty($nnGooglePayDoRedirect) && $nnGooglePayDoRedirect == 'true')) {
                             if(!empty($paymentResponseData) && !empty($paymentResponseData['result']['redirect_url']) && !empty($paymentResponseData['transaction']['txn_secret'])) {
                                 // Transaction secret used for the later checksum verification
                                 $sessionStorage->getPlugin()->setValue('nnTxnSecret', $paymentResponseData['transaction']['txn_secret']);
