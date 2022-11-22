@@ -39,6 +39,7 @@ jQuery(document).ready(function() {
                 },
                 callbacks: {
                     onProcessCompletion: function (response, processedStatus) {
+                        processedStatus({status: "SUCCESS", statusText: ""});
                         // Only on success, we proceed further with the booking
                         if(response.result.status == "SUCCESS") {
                             jQuery('#nn_google_pay_token').val(response.transaction.token);
