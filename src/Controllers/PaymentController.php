@@ -196,7 +196,7 @@ class PaymentController extends Controller
             $this->sessionStorage->getPlugin()->setValue('nnGooglePayDoRedirect', $paymentRequestPostData['nn_google_pay_do_redirect']);
         }
         // Call the order creation function for the redirection
-        if(!empty($paymentRequestPostData['nn_cc3d_redirect']) || !empty($paymentRequestPostData['nn_google_pay_do_redirect'])) {
+        if(!empty($paymentRequestPostData['nn_cc3d_redirect']) || (!empty($paymentRequestPostData['nn_google_pay_do_redirect']) && $paymentRequestPostData['nn_google_pay_do_redirect'] == 'true')) {
             $paymentRequestData['paymentRequestData']['transaction']['return_url'] = $this->paymentService->getReturnPageUrl();
             $this->sessionStorage->getPlugin()->setValue('nnPaymentData', $paymentRequestData);
             if(!empty($paymentRequestPostData['nn_reinitializePayment']) || $this->settingsService->getPaymentSettingsValue('novalnet_order_creation') != true) {
