@@ -1,7 +1,7 @@
 jQuery(document).ready(function () {
     loadCardForm();
     jQuery('#nn_cc_form').submit( function (e) {
-        jQuery('#novalnet_form_btn').attr('disabled',true);
+        jQuery('#novalnet_form_btn').prop('disabled', true);
         if(jQuery('#nn_pan_hash').val().trim() == '') {
             NovalnetUtility.getPanHash();
             e.preventDefault();
@@ -28,7 +28,7 @@ function loadCardForm() {
             },
             on_error: function (result) {
                 if(undefined !== result['error_message']) {
-                    jQuery('#novalnet_form_btn').attr('disabled',false);
+                    jQuery('#novalnet_form_btn').prop('disabled', false);
                     alert(result['error_message']);
                     return false;
                 }
