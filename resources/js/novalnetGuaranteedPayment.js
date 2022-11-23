@@ -124,15 +124,15 @@ jQuery(document).ready( function() {
     }
     autocompleteYear(document.getElementById("nn_guarantee_year"), year_range);
     jQuery('#novalnet_form').on('submit', function() {
-        jQuery('#novalnet_form_btn').attr('disabled',true);
+        jQuery('#novalnet_form_btn').prop('disabled', true);
         if(jQuery("#nn_guarantee_year").val() == '' || jQuery("#nn_guarantee_date").val() == '' ) {
             alert(jQuery("#nn_dob_empty").val());
-            jQuery('#novalnet_form_btn').attr('disabled',false);
+            jQuery('#novalnet_form_btn').prop('disabled', false);
             return false;
         }
         if(jQuery("#nn_guarantee_month").val() == '0') {
             alert(jQuery("#nn_dob_invalid").val());
-            jQuery('#novalnet_form_btn').attr('disabled',false);
+            jQuery('#novalnet_form_btn').prop('disabled', false);
             return false;
         }
         return isActualDate(jQuery("#nn_guarantee_month").val(), jQuery("#nn_guarantee_date").val(), jQuery("#nn_guarantee_year").val());
@@ -142,7 +142,7 @@ jQuery(document).ready( function() {
         var tempDate = new Date(year, --month, day);
         if(month !== tempDate.getMonth() || jQuery("#nn_guarantee_year").val().length < 4) {
             alert(jQuery("#nn_dob_invalid").val());
-            jQuery('#novalnet_form_btn').attr('disabled',false);
+            jQuery('#novalnet_form_btn').prop('disabled', false);
             return false;
         }
         return true;
