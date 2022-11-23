@@ -87,11 +87,12 @@ jQuery(document).ready(function() {
                      // Accept the terms and condition when click the Google pay button
 			isAcceptTermsAndCondn();
 			jQuery('.widget-gtc-check').on('click', function() {
-				isAcceptTermsAndCondn();
+				jQuery('#nn_google_pay').find('button').prop('disabled', false);
 			});
 			jQuery('#nn_google_pay').on('click', function() {
 				if(!jQuery('.widget-gtc-check input[type="checkbox"]').is(':checked')) {
 					alert('please click the terms and condition');
+					return false;
 				}
 			});
                 }
