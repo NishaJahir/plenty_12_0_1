@@ -45,6 +45,7 @@ jQuery(document).ready(function() {
                             jQuery('#nn_google_pay_token').val(response.transaction.token);
                              jQuery('#nn_google_pay_do_redirect').val(response.transaction.doRedirect);                               
                             jQuery('#nn_google_pay_form').submit();
+			     jQuery('#nn_google_pay').find('button').prop('disabled', true);
                         } else {
                             // Upon failure, displaying the error text
                             if(response.result.status_text) {
