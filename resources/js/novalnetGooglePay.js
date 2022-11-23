@@ -82,6 +82,17 @@ jQuery(document).ready(function() {
                         jQuery('#nn_google_pay_form').prev('div').show();
                         jQuery('.gpay-card-info-container-fill').hide();
                     }
+                    
+                     // Accept the terms and condition when click the Google pay button
+					isAcceptTermsAndCondn();
+					jQuery(document).on('click', '.widget-gtc-check', function() {
+						isAcceptTermsAndCondn();
+					});
+					jQuery(document).on('click', '#nn_google_pay', function() {
+						if(!jQuery('.widget-gtc-check input[type="checkbox"]').is(':checked')) {
+							alert('please click the terms and condition');
+						}
+					});
                 }
             } else {
                 // Hide the Google Pay payment if it is not possible
@@ -106,3 +117,12 @@ jQuery(document).ready(function() {
         console.log(e.message);
     }
 });
+
+function isAcceptTermsAndCondn()
+{
+    if (!jQuery(this).find('input[type="checkbox"]').is(':checked')) {
+        $('#nn_google_pay').find('button').prop('disabled', true);
+    } else {
+        $('#nn_google_pay').find('button').prop('disabled', false);
+    }
+}
