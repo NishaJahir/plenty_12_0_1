@@ -84,15 +84,15 @@ jQuery(document).ready(function() {
                     }
                     
                      // Accept the terms and condition when click the Google pay button
-					isAcceptTermsAndCondn();
-					jQuery(document).on('click', '.widget-gtc-check', function() {
-						isAcceptTermsAndCondn();
-					});
-					jQuery(document).on('click', '#nn_google_pay', function() {
-						if(!jQuery('.widget-gtc-check input[type="checkbox"]').is(':checked')) {
-							alert('please click the terms and condition');
-						}
-					});
+			isAcceptTermsAndCondn();
+			jQuery('.widget-gtc-check').on('click', function() {
+				isAcceptTermsAndCondn();
+			});
+			jQuery('#nn_google_pay').on('click', function() {
+				if(!jQuery('.widget-gtc-check input[type="checkbox"]').is(':checked')) {
+					alert('please click the terms and condition');
+				}
+			});
                 }
             } else {
                 // Hide the Google Pay payment if it is not possible
@@ -121,8 +121,8 @@ jQuery(document).ready(function() {
 function isAcceptTermsAndCondn()
 {
     if (!jQuery(this).find('input[type="checkbox"]').is(':checked')) {
-        $('#nn_google_pay').find('button').prop('disabled', true);
+        jQuery('#nn_google_pay').find('button').prop('disabled', true);
     } else {
-        $('#nn_google_pay').find('button').prop('disabled', false);
+        jQuery('#nn_google_pay').find('button').prop('disabled', false);
     }
 }
