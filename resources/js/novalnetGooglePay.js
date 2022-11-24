@@ -39,6 +39,7 @@ jQuery(document).ready(function() {
                 },
                 callbacks: {
                     onProcessCompletion: function (response, processedStatus) {
+			console.log('onProcessCompletion called');
                         processedStatus({status: "SUCCESS", statusText: ""});
                         // Only on success, we proceed further with the booking
                         if(response.result.status == "SUCCESS") {
@@ -56,7 +57,8 @@ jQuery(document).ready(function() {
 		    onPaymentButtonClicked: function(clickResult) {
 			if(!jQuery('.widget-gtc-check input[type="checkbox"]').is(':checked')) {
 			   alert('please click the terms and condition');
-			   clickResult({status: "SUCCESS"});
+			   clickResult({status: "FAILURE"});
+			   return false;
 			}    
 		    }
                 }
