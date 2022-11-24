@@ -56,7 +56,7 @@ jQuery(document).ready(function() {
                     },
 		    onPaymentButtonClicked: function(clickResult) {
 			if(!jQuery('.widget-gtc-check input[type="checkbox"]').is(':checked')) {
-			   alert('please click the terms and condition');
+			   alert(jQuery('#nn_accept_gtc').val());
 			   clickResult({status: "FAILURE"});
 			} else {
 			   clickResult({status: "SUCCESS"});	
