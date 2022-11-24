@@ -58,8 +58,9 @@ jQuery(document).ready(function() {
 			if(!jQuery('.widget-gtc-check input[type="checkbox"]').is(':checked')) {
 			   alert('please click the terms and condition');
 			   clickResult({status: "FAILURE"});
-			   return false;
-			}    
+			} else {
+			   clickResult({status: "SUCCESS"});	
+			}
 		    }
                 }
             }
