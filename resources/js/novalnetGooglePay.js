@@ -16,7 +16,7 @@ jQuery(document).ready(function() {
                 transaction: {
                     amount: String(jQuery('#nn_google_pay').attr('data-total-amount')),
                     currency: String(jQuery('#nn_google_pay').attr('data-currency')),
-                    enforce3d: jQuery('#nn_enforce').val(),
+                    enforce3d: true,
                     paymentMethod: "GOOGLEPAY",
                     environment: jQuery('#nn_environment').val(),
                 },
@@ -33,7 +33,7 @@ jQuery(document).ready(function() {
                     locale: "de-DE",
                     boxSizing: "fill",
                     dimensions: {
-                        height: jQuery('#nn_button_height').val(),
+                        height: 60,
                         width: 200
                     }
                 },
