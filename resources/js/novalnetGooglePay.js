@@ -1,7 +1,6 @@
 jQuery(document).ready(function() {
     // Load the Google Pay button
     try {
-	 jQuery('#nn_google_pay').empty();
         // Load the payment instances
         var NovalnetPaymentInstance  = NovalnetPayment();
         var NovalnetWalletPaymentObj = NovalnetPaymentInstance.createPaymentObject();
@@ -78,6 +77,7 @@ jQuery(document).ready(function() {
                 } else {
                     jQuery('li[data-id="'+mopId+'"]').show();
                     jQuery('li[data-id="'+mopId+'"]').click(function() {
+			    jQuery('#nn_google_pay').empty();
 			    // Initiating the payment request for the wallet payment
 			    NovalnetWalletPaymentObj.addPaymentButton("#nn_google_pay");
 			    jQuery('.widget-place-order').children('div').hide();
