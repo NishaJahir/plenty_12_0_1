@@ -65,6 +65,7 @@ jQuery(document).ready(function() {
                 }
             }
         };
+	    console.log(requestData);
         NovalnetWalletPaymentObj.setPaymentIntent(requestData);
         // Checking for the Payment method availability
         NovalnetWalletPaymentObj.isPaymentMethodAvailable(function(displayGooglePayButton) {
