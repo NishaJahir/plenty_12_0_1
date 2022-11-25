@@ -196,7 +196,7 @@ class PaymentController extends Controller
             $this->sessionStorage->getPlugin()->setValue('nnGooglePayDoRedirect', $paymentRequestPostData['nn_google_pay_do_redirect']);
         }
         // Call the order creation function for the redirection
-        if(!empty($paymentRequestPostData['nn_cc3d_redirect']) || (!empty($paymentRequestPostData['nn_google_pay_do_redirect']) && $paymentRequestPostData['nn_google_pay_do_redirect'] == 'true')) {
+        if(!empty($paymentRequestPostData['nn_cc3d_redirect']) || (!empty($paymentRequestPostData['nn_google_pay_do_redirect']) && (string) $paymentRequestPostData['nn_google_pay_do_redirect'] === 'true')) {
             $paymentRequestData['paymentRequestData']['transaction']['return_url'] = $this->paymentService->getReturnPageUrl();
             $this->sessionStorage->getPlugin()->setValue('nnPaymentData', $paymentRequestData);
             if(!empty($paymentRequestPostData['nn_reinitializePayment']) || $this->settingsService->getPaymentSettingsValue('novalnet_order_creation') != true) {
@@ -248,7 +248,7 @@ class PaymentController extends Controller
         $this->sessionStorage->getPlugin()->setValue('nnDoRedirect', null);
         $this->sessionStorage->getPlugin()->setValue('nnGooglePayDoRedirect', null);
         $this->paymentService->logger('key', $paymentKey);
-        if($this->paymentService->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || (!empty($nnGooglePayDoRedirect) && $nnGooglePayDoRedirect == 'true')) {
+        if($this->paymentService->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || (!empty($nnGooglePayDoRedirect) && (string) $nnGooglePayDoRedirect === 'true')) {
             if(!empty($paymentResponseData) && !empty($paymentResponseData['result']['redirect_url']) && !empty($paymentResponseData['transaction']['txn_secret'])) {
                 // Transaction secret used for the later checksum verification
                 $this->sessionStorage->getPlugin()->setValue('nnTxnSecret', $paymentResponseData['transaction']['txn_secret']);
