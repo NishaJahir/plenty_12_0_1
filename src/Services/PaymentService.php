@@ -656,6 +656,7 @@ class PaymentService
             'plugin_version'    => $paymentResponseData['transaction']['system_version'] ?? NovalnetConstants::PLUGIN_VERSION,
         ];
         if($paymentResponseData['result']['status'] == 'SUCCESS') {
+            $this->getSavedBankDetails($paymentResponseData);
             // Add the Bank details for the invoice payments
             if(in_array($paymentResponseData['payment_method'], ['novalnet_invoice', 'novalnet_guaranteed_invoice', 'novalnet_prepayment'])) {
                 $additionalInfo['invoice_account_holder'] = $paymentResponseData['transaction']['bank_details']['account_holder'];
@@ -685,6 +686,7 @@ class PaymentService
         if(isset($paymentResponseData['credit'])) {
             $additionalInfo['type'] = 'credit';
         }
+        $this->getLogger(__METHOD__)->error('finallly', $paymentResponseData);
         return json_encode($additionalInfo);
     }
 
@@ -1206,6 +1208,20 @@ class PaymentService
         } else {
             $this->getLogger(__METHOD__)->error('Novalnet::updateApiVersion failed', $paymentResponseData);
         }
+   }
+    
+   public function getSavedBankDetails(&$paymentResponseData) 
+   {
+       $transactionDetails = $this->getDatabaseValues($paymentResponseData['transaction']['order_no']);
+       foreach($transactionDetails as $transactionDetail) {
+           $additionalInfo = json_decode($transactionDetail->additionalInfo, true);
+           $paymentResponseData['transaction']['bank_details']['account_holder'] = $additionalInfo['invoice_account_holder'];
+           $paymentResponseData['transaction']['bank_details']['iban']           = $additionalInfo['invoice_iban'];
+           $paymentResponseData['transaction']['bank_details']['bic']            = $additionalInfo['invoice_bic'];
+           $paymentResponseData['transaction']['bank_details']['bank_name']      = $additionalInfo['invoice_bankname'];
+           $paymentResponseData['transaction']['bank_details']['bank_place']     = $additionalInfo['invoice_bankplace'];
+           $paymentResponseData['transaction']['invoice_ref']                    = $additionalInfo['invoice_ref'];
+       }
    }
     
     public function logger($k, $v)
