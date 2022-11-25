@@ -470,7 +470,7 @@ class PaymentService
         $this->getLogger(__METHOD__)->error('Payment Request', $paymentRequestData);
         $this->getLogger(__METHOD__)->error('Payment Response', $paymentResponseData);
         // Do redirect if the redirect URL is present
-        if($this->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || (!empty($nnGooglePayDoRedirect) && $nnGooglePayDoRedirect == 'true')) {
+        if($this->isRedirectPayment($paymentKey) || !empty($nnDoRedirect) || (!empty($nnGooglePayDoRedirect) && (string) $nnGooglePayDoRedirect === 'true')) {
             // Set the payment response in the session for the further processings
             $this->sessionStorage->getPlugin()->setValue('nnPaymentData', $paymentRequestData['paymentRequestData']);
             return $paymentResponseData;
@@ -585,6 +585,10 @@ class PaymentService
         if($nnPaymentData['payment_method'] == 'novalnet_cashpayment' && !empty($nnPaymentData['transaction']['checkout_token']) && $nnPaymentData['transaction']['status'] == 'PENDING') {
             $this->sessionStorage->getPlugin()->setValue('novalnetCheckoutToken', $nnPaymentData['transaction']['checkout_token']);
             $this->sessionStorage->getPlugin()->setValue('novalnetCheckoutUrl', $nnPaymentData['transaction']['checkout_js']);
+            // Set the store details into session when the payment before order completion set as 'No'
+            if($this->settingsService->getPaymentSettingsValue('novalnet_order_creation') != true) {
+                $this->sessionStorage->getPlugin()->setValue('nnStoreDetails', $nnPaymentData['transaction']['nearest_stores']);
+            }
         }
         $this->getLogger(__METHOD__)->error('before nnpayment', $nnPaymentData);
         // Update the Order No to the order if the payment before order completion set as 'No' for direct payments
@@ -666,7 +670,7 @@ class PaymentService
             }
             // Add the store details for the cashpayment
             if($paymentResponseData['payment_method'] == 'novalnet_cashpayment') {
-                $additionalInfo['store_details'] = $paymentResponseData['transaction']['nearest_stores'];
+                $additionalInfo['store_details'] = !empty($paymentResponseData['transaction']['nearest_stores']) ? $paymentResponseData['transaction']['nearest_stores'] : $this->sessionStorage->getPlugin()->getValue('nnStoreDetails');
                 $additionalInfo['cp_due_date']   = $paymentResponseData['transaction']['due_date'];
             }
             // Add the pament reference details for the Multibanco
