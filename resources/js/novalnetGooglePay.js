@@ -33,7 +33,7 @@ jQuery(document).ready(function() {
                     locale: "de-DE",
                     boxSizing: "fill",
                     dimensions: {
-                        height: jQuery('#nn_button_height').val(),
+                        height: parseInt(jQuery('#nn_button_height').val()),
                         width: 200
                     }
                 },
