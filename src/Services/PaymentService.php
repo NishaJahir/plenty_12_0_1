@@ -558,7 +558,7 @@ class PaymentService
     public function getFullTxnResponse($paymentResponseData)
     {
         $paymentRequestData = [];
-        $paymentRequestData['transaction']['tid'] = $paymentResponseData['tid'];
+        $paymentRequestData['transaction']['tid'] = !empty$paymentResponseData['tid'];
         $privatekey = $this->settingsService->getPaymentSettingsValue('novalnet_private_key');
         return $this->paymentHelper->executeCurl($paymentRequestData, NovalnetConstants::TXN_RESPONSE_URL, $privatekey);
     }
@@ -603,6 +603,9 @@ class PaymentService
              $this->getLogger(__METHOD__)->error('post back response', $paymentResponseData);
             $nnPaymentData = array_merge($nnPaymentData, $paymentResponseData);
             $this->sessionStorage->getPlugin()->setValue('nnInvoiceRef', $nnPaymentData['transaction']['invoice_ref']);
+            // Retrieve the full payment response
+            $paymentResponseData123 = $this->getFullTxnResponse($paymentResponseData);
+             $this->getLogger(__METHOD__)->error('Full response', $paymentResponseData123);
         }
         $this->getLogger(__METHOD__)->error('after nnpayment', $nnPaymentData);
         // Insert payment response into Novalnet table
