@@ -78,7 +78,10 @@ jQuery(document).ready(function() {
                 } else {
                     jQuery('li[data-id="'+mopId+'"]').show();
                     jQuery('li[data-id="'+mopId+'"]').click(function() {
-			    jQuery('#nn_google_pay').empty();
+			    
+			    if(Query('#nn_google_pay').length != 0) {
+				    jQuery('#nn_google_pay').empty();
+			    }
 			    // Initiating the payment request for the wallet payment
 			    NovalnetWalletPaymentObj.addPaymentButton("#nn_google_pay");
 			    jQuery('.widget-place-order').children('div').hide();
