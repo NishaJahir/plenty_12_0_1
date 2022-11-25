@@ -558,7 +558,7 @@ class PaymentService
     public function getFullTxnResponse($paymentResponseData)
     {
         $paymentRequestData = [];
-        $paymentRequestData['transaction']['tid'] = !empty$paymentResponseData['tid'];
+        $paymentRequestData['transaction']['tid'] = !empty($paymentResponseData['tid']) ? $paymentResponseData['tid'] : $paymentResponseData['transaction']['tid'];
         $privatekey = $this->settingsService->getPaymentSettingsValue('novalnet_private_key');
         return $this->paymentHelper->executeCurl($paymentRequestData, NovalnetConstants::TXN_RESPONSE_URL, $privatekey);
     }
