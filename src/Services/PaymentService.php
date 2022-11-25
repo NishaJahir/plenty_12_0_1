@@ -558,7 +558,7 @@ class PaymentService
     public function getFullTxnResponse($paymentResponseData)
     {
         $paymentRequestData = [];
-        $paymentRequestData['transaction']['tid'] = !empty($paymentResponseData['tid']) ? $paymentResponseData['tid'] : $paymentResponseData['transaction']['tid'];
+        $paymentRequestData['transaction']['tid'] = $paymentResponseData['tid'];
         $privatekey = $this->settingsService->getPaymentSettingsValue('novalnet_private_key');
         return $this->paymentHelper->executeCurl($paymentRequestData, NovalnetConstants::TXN_RESPONSE_URL, $privatekey);
     }
@@ -585,27 +585,15 @@ class PaymentService
         if($nnPaymentData['payment_method'] == 'novalnet_cashpayment' && !empty($nnPaymentData['transaction']['checkout_token']) && $nnPaymentData['transaction']['status'] == 'PENDING') {
             $this->sessionStorage->getPlugin()->setValue('novalnetCheckoutToken', $nnPaymentData['transaction']['checkout_token']);
             $this->sessionStorage->getPlugin()->setValue('novalnetCheckoutUrl', $nnPaymentData['transaction']['checkout_js']);
-            // Set the store details into session when the payment before order completion set as 'No'
-            if($this->settingsService->getPaymentSettingsValue('novalnet_order_creation') != true) {
-                $this->sessionStorage->getPlugin()->setValue('nnStoreDetails', $nnPaymentData['transaction']['nearest_stores']);
-            }
-        }
-        // Set the payment reference into session for Multibanco when the payment before order completion set as 'No'
-        if($this->settingsService->getPaymentSettingsValue('novalnet_order_creation') != true && $nnPaymentData['payment_method'] == 'novalnet_multibanco' && $nnPaymentData['transaction']['status'] == 'PENDING') {
-             $this->sessionStorage->getPlugin()->setValue('nnPartnerReference', $nnPaymentData['transaction']['partner_payment_reference']);
-             $this->sessionStorage->getPlugin()->setValue('nnSupplierId', $nnPaymentData['transaction']['service_supplier_id']);
-        }            
+        }         
         $this->getLogger(__METHOD__)->error('before nnpayment', $nnPaymentData);
         
         // Update the Order No to the order if the payment before order completion set as 'No' for direct payments
          if(empty($nnOrderCreator) && $this->settingsService->getPaymentSettingsValue('novalnet_order_creation') != true) {
             $paymentResponseData = $this->sendPostbackCall($nnPaymentData);
+            $nnPaymentData['transaction']['order_no'] = $paymentResponseData['transaction']['order_no'];
+            $nnPaymentData['transaction']['invoice_ref'] = $paymentResponseData['transaction']['invoice_ref'];
              $this->getLogger(__METHOD__)->error('post back response', $paymentResponseData);
-            $nnPaymentData = array_merge($nnPaymentData, $paymentResponseData);
-            $this->sessionStorage->getPlugin()->setValue('nnInvoiceRef', $nnPaymentData['transaction']['invoice_ref']);
-            // Retrieve the full payment response
-            $paymentResponseData123 = $this->getFullTxnResponse($paymentResponseData);
-             $this->getLogger(__METHOD__)->error('Full response', $paymentResponseData123);
         }
         $this->getLogger(__METHOD__)->error('after nnpayment', $nnPaymentData);
         // Insert payment response into Novalnet table
@@ -676,17 +664,17 @@ class PaymentService
                 $additionalInfo['invoice_bankname']       = $paymentResponseData['transaction']['bank_details']['bank_name'];
                 $additionalInfo['invoice_bankplace']      = $paymentResponseData['transaction']['bank_details']['bank_place'];
                 $additionalInfo['due_date']               = $paymentResponseData['transaction']['due_date'];
-                $additionalInfo['invoice_ref']            = !empty($paymentResponseData['transaction']['invoice_ref']) ? $paymentResponseData['transaction']['invoice_ref'] : $this->sessionStorage->getPlugin()->getValue('nnInvoiceRef');
+                $additionalInfo['invoice_ref']            = $paymentResponseData['transaction']['invoice_ref']) ? $paymentResponseData['transaction']['invoice_ref'];
             }
             // Add the store details for the cashpayment
             if($paymentResponseData['payment_method'] == 'novalnet_cashpayment') {
-                $additionalInfo['store_details'] = !empty($paymentResponseData['transaction']['nearest_stores']) ? $paymentResponseData['transaction']['nearest_stores'] : $this->sessionStorage->getPlugin()->getValue('nnStoreDetails');
+                $additionalInfo['store_details'] = $paymentResponseData['transaction']['nearest_stores'];
                 $additionalInfo['cp_due_date']   = $paymentResponseData['transaction']['due_date'];
             }
             // Add the pament reference details for the Multibanco
             if($paymentResponseData['payment_method'] == 'novalnet_multibanco') {
-                $additionalInfo['partner_payment_reference'] = !empty($paymentResponseData['transaction']['partner_payment_reference']) ? $paymentResponseData['transaction']['partner_payment_reference'] : $this->sessionStorage->getPlugin()->getValue('nnPartnerReference');
-                $additionalInfo['service_supplier_id']       = !empty($paymentResponseData['transaction']['service_supplier_id']) ? $paymentResponseData['transaction']['service_supplier_id'] : $this->sessionStorage->getPlugin()->getValue('nnSupplierId');
+                $additionalInfo['partner_payment_reference'] = $paymentResponseData['transaction']['partner_payment_reference'];
+                $additionalInfo['service_supplier_id']       = $paymentResponseData['transaction']['service_supplier_id'];
             }
         }
         // Add the type param when the refund was executed
