@@ -34,7 +34,7 @@ jQuery(document).ready(function() {
                     boxSizing: "fill",
                     dimensions: {
                         height: parseInt(jQuery('#nn_button_height').val()),
-                        width: 200
+                        width: 100%
                     }
                 },
                 callbacks: {
