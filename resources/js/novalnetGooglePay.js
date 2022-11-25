@@ -34,7 +34,7 @@ jQuery(document).ready(function() {
                     boxSizing: "fill",
                     dimensions: {
                         height: parseInt(jQuery('#nn_button_height').val()),
-                        width: 100%
+                        width: 500
                     }
                 },
                 callbacks: {
@@ -78,9 +78,7 @@ jQuery(document).ready(function() {
                 } else {
                     jQuery('li[data-id="'+mopId+'"]').show();
                     jQuery('li[data-id="'+mopId+'"]').click(function() {
-			    if(jQuery('#nn_google_pay').find('button').length) {
 				jQuery('#nn_google_pay').empty();
-			    }
 			    // Initiating the payment request for the wallet payment
 			    NovalnetWalletPaymentObj.addPaymentButton("#nn_google_pay");
 			    jQuery('.widget-place-order').children('div').hide();
