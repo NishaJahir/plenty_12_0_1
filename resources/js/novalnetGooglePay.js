@@ -44,9 +44,9 @@ jQuery(document).ready(function() {
                         // Only on success, we proceed further with the booking
                         if(response.result.status == "SUCCESS") {
                             jQuery('#nn_google_pay_token').val(response.transaction.token);
-                             jQuery('#nn_google_pay_do_redirect').val(response.transaction.doRedirect);                               
+                            jQuery('#nn_google_pay_do_redirect').val(response.transaction.doRedirect);                               
                             jQuery('#nn_google_pay_form').submit();
-			     jQuery('#nn_google_pay').find('button').prop('disabled', true);
+			    jQuery('#nn_google_pay').find('button').prop('disabled', true);
                         } else {
                             // Upon failure, displaying the error text
                             if(response.result.status_text) {
@@ -55,7 +55,7 @@ jQuery(document).ready(function() {
                         }
                     },
 		    onPaymentButtonClicked: function(clickResult) {
-			if(!jQuery('.widget-gtc-check input[type="checkbox"]').is(':checked')) {
+			if(!jQuery('.widget-gtc-check input[type="checkbox"]').is(':checked') && jQuery('#nn_reinitializePayment').val() != 1) {
 			   alert(jQuery('#nn_accept_gtc').val());
 			   clickResult({status: "FAILURE"});
 			} else {
