@@ -596,7 +596,7 @@ class PaymentService
              $this->sessionStorage->getPlugin()->setValue('nnSupplierId', $nnPaymentData['transaction']['service_supplier_id']);
         }            
         $this->getLogger(__METHOD__)->error('before nnpayment', $nnPaymentData);
-        $this->getLogger(__METHOD__)->error('locale', locale_get_default());
+        
         // Update the Order No to the order if the payment before order completion set as 'No' for direct payments
          if(empty($nnOrderCreator) && $this->settingsService->getPaymentSettingsValue('novalnet_order_creation') != true) {
             $paymentResponseData = $this->sendPostbackCall($nnPaymentData);
