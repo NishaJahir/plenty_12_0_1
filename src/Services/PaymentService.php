@@ -664,7 +664,7 @@ class PaymentService
                 $additionalInfo['invoice_bankname']       = $paymentResponseData['transaction']['bank_details']['bank_name'];
                 $additionalInfo['invoice_bankplace']      = $paymentResponseData['transaction']['bank_details']['bank_place'];
                 $additionalInfo['due_date']               = $paymentResponseData['transaction']['due_date'];
-                $additionalInfo['invoice_ref']            = $paymentResponseData['transaction']['invoice_ref']) ? $paymentResponseData['transaction']['invoice_ref'];
+                $additionalInfo['invoice_ref']            = $paymentResponseData['transaction']['invoice_ref'];
             }
             // Add the store details for the cashpayment
             if($paymentResponseData['payment_method'] == 'novalnet_cashpayment') {
