@@ -616,7 +616,7 @@ class PaymentService
     {
          // Assign the payment method
         if(empty($paymentResponseData['payment_method'])) {
-            $paymentResponseData['payment_method'] = $this->paymentHelper->getPaymentKey($paymentResponseData['transaction']['payment_type']);
+            $paymentResponseData['payment_method'] = strtolower($this->paymentHelper->getPaymentKey($paymentResponseData['transaction']['payment_type']));
         }
         $additionalInfo = $this->getAdditionalPaymentInfo($paymentResponseData);
         $orderTotalAmount = 0;
@@ -656,9 +656,11 @@ class PaymentService
             'plugin_version'    => $paymentResponseData['transaction']['system_version'] ?? NovalnetConstants::PLUGIN_VERSION,
         ];
         if($paymentResponseData['result']['status'] == 'SUCCESS') {
-            $this->getSavedBankDetails($paymentResponseData);
             // Add the Bank details for the invoice payments
             if(in_array($paymentResponseData['payment_method'], ['novalnet_invoice', 'novalnet_guaranteed_invoice', 'novalnet_prepayment'])) {
+                if(empty($paymentResponseData['transaction']['bank_details'])) {
+                    $this->getSavedBankDetails($paymentResponseData);
+                }
                 $additionalInfo['invoice_account_holder'] = $paymentResponseData['transaction']['bank_details']['account_holder'];
                 $additionalInfo['invoice_iban']           = $paymentResponseData['transaction']['bank_details']['iban'];
                 $additionalInfo['invoice_bic']            = $paymentResponseData['transaction']['bank_details']['bic'];
@@ -1212,16 +1214,14 @@ class PaymentService
     
    public function getSavedBankDetails(&$paymentResponseData) 
    {
-       $transactionDetails = $this->getDatabaseValues($paymentResponseData['transaction']['order_no']);
-       foreach($transactionDetails as $transactionDetail) {
-           $additionalInfo = json_decode($transactionDetail->additionalInfo, true);
-           $paymentResponseData['transaction']['bank_details']['account_holder'] = $additionalInfo['invoice_account_holder'];
-           $paymentResponseData['transaction']['bank_details']['iban']           = $additionalInfo['invoice_iban'];
-           $paymentResponseData['transaction']['bank_details']['bic']            = $additionalInfo['invoice_bic'];
-           $paymentResponseData['transaction']['bank_details']['bank_name']      = $additionalInfo['invoice_bankname'];
-           $paymentResponseData['transaction']['bank_details']['bank_place']     = $additionalInfo['invoice_bankplace'];
-           $paymentResponseData['transaction']['invoice_ref']                    = $additionalInfo['invoice_ref'];
-       }
+       $transactionData = $this->getDatabaseValues($paymentResponseData['transaction']['order_no']);
+       $paymentResponseData['transaction']['bank_details']['account_holder'] = $transactionData['invoice_account_holder'];
+       $paymentResponseData['transaction']['bank_details']['iban']           = $transactionData['invoice_iban'];
+       $paymentResponseData['transaction']['bank_details']['bic']            = $transactionData['invoice_bic'];
+       $paymentResponseData['transaction']['bank_details']['bank_name']      = $transactionData['invoice_bankname'];
+       $paymentResponseData['transaction']['bank_details']['bank_place']     = $transactionData['invoice_bankplace'];
+       $paymentResponseData['transaction']['invoice_ref']                    = $transactionData['invoice_ref'];
+      
    }
     
     public function logger($k, $v)
