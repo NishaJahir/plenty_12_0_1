@@ -1213,17 +1213,27 @@ class PaymentService
         }
    }
     
-   public function getSavedBankDetails(&$paymentResponseData) 
+   public function getSavedPaymentDetails(&$paymentResponseData) 
    {
        $transactionData = $this->getDatabaseValues($paymentResponseData['transaction']['order_no']);
-       $paymentResponseData['transaction']['bank_details']['account_holder'] = $transactionData['invoice_account_holder'];
-       $paymentResponseData['transaction']['bank_details']['iban']           = $transactionData['invoice_iban'];
-       $paymentResponseData['transaction']['bank_details']['bic']            = $transactionData['invoice_bic'];
-       $paymentResponseData['transaction']['bank_details']['bank_name']      = $transactionData['invoice_bankname'];
-       $paymentResponseData['transaction']['bank_details']['bank_place']     = $transactionData['invoice_bankplace'];
-       $paymentResponseData['transaction']['due_date']                       = $transactionData['due_date'];
-       $paymentResponseData['transaction']['invoice_ref']                    = $transactionData['invoice_ref'];
-       $paymentResponsedata['payment_method']                                = $transactionData['paymentName'];
+       if(in_array($transactionData['paymentName'], ['novalnet_invoice', 'novalnet_guaranteed_invoice', 'novalnet_prepayment'])) {
+           $paymentResponseData['transaction']['bank_details']['account_holder'] = $transactionData['invoice_account_holder'];
+           $paymentResponseData['transaction']['bank_details']['iban']           = $transactionData['invoice_iban'];
+           $paymentResponseData['transaction']['bank_details']['bic']            = $transactionData['invoice_bic'];
+           $paymentResponseData['transaction']['bank_details']['bank_name']      = $transactionData['invoice_bankname'];
+           $paymentResponseData['transaction']['bank_details']['bank_place']     = $transactionData['invoice_bankplace'];
+           $paymentResponseData['transaction']['due_date']                       = $transactionData['due_date'];
+           $paymentResponseData['transaction']['invoice_ref']                    = $transactionData['invoice_ref'];
+           $paymentResponsedata['payment_method']                                = $transactionData['paymentName'];
+       }
+       if($transactionData['paymentName'] == 'novalnet_cashpayment') {
+           $paymentResponsedata['transaction']['nearest_stores'] = $transactionData['store_details'];
+           $paymentResponsedata['transaction']['due_date']       = $transactionData['cp_due_date'];
+       }
+       if($transactionData['paymentName'] == 'novalnet_multibanco') {
+           $paymentResponsedata['transaction']['partner_payment_reference'] = $transactionData['partner_payment_reference'];
+           $paymentResponsedata['transaction']['service_supplier_id']       = $transactionData['service_supplier_id'];
+       }
       
    }
     
