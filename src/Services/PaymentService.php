@@ -622,7 +622,7 @@ class PaymentService
         $orderTotalAmount = 0;
         // Set the order total amount for Refund and Credit followups
         if(!empty($refundOrderTotalAmount) || !empty($creditOrderTotalAmount)) {
-            $orderTotalAmount = $refundOrderTotalAmount ?? $creditOrderTotalAmount;
+            $orderTotalAmount = !empty($refundOrderTotalAmount) ? $refundOrderTotalAmount : $creditOrderTotalAmount;
         }
         $transactionData = [
             'order_no'         => $paymentResponseData['transaction']['order_no'],
