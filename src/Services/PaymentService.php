@@ -658,6 +658,7 @@ class PaymentService
         if($paymentResponseData['result']['status'] == 'SUCCESS') {
             // Add the Bank details for the invoice payments
             if(in_array($paymentResponseData['payment_method'], ['novalnet_invoice', 'novalnet_guaranteed_invoice', 'novalnet_prepayment'])) {
+                $dueDate = !empty($paymentResponseData['transaction']['due_date']) ? $paymentResponseData['transaction']['due_date'] : '';
                 if(empty($paymentResponseData['transaction']['bank_details'])) {
                     $this->getSavedBankDetails($paymentResponseData);
                 }
@@ -666,7 +667,7 @@ class PaymentService
                 $additionalInfo['invoice_bic']            = $paymentResponseData['transaction']['bank_details']['bic'];
                 $additionalInfo['invoice_bankname']       = $paymentResponseData['transaction']['bank_details']['bank_name'];
                 $additionalInfo['invoice_bankplace']      = $paymentResponseData['transaction']['bank_details']['bank_place'];
-                $additionalInfo['due_date']               = $paymentResponseData['transaction']['due_date'];
+                $additionalInfo['due_date']               = !empty($dueData) ? $dueDate : $paymentResponseData['transaction']['due_date'];
                 $additionalInfo['invoice_ref']            = $paymentResponseData['transaction']['invoice_ref'];
             }
             // Add the store details for the cashpayment
@@ -1220,6 +1221,7 @@ class PaymentService
        $paymentResponseData['transaction']['bank_details']['bic']            = $transactionData['invoice_bic'];
        $paymentResponseData['transaction']['bank_details']['bank_name']      = $transactionData['invoice_bankname'];
        $paymentResponseData['transaction']['bank_details']['bank_place']     = $transactionData['invoice_bankplace'];
+       $paymentResponseData['transaction']['due_date']                       = $transactionData['due_date'];
        $paymentResponseData['transaction']['invoice_ref']                    = $transactionData['invoice_ref'];
        $paymentResponsedata['payment_method']                                = $transactionData['paymentName'];
       
