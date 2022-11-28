@@ -1221,6 +1221,7 @@ class PaymentService
        $paymentResponseData['transaction']['bank_details']['bank_name']      = $transactionData['invoice_bankname'];
        $paymentResponseData['transaction']['bank_details']['bank_place']     = $transactionData['invoice_bankplace'];
        $paymentResponseData['transaction']['invoice_ref']                    = $transactionData['invoice_ref'];
+       $paymentResponsedata['payment_method']                                = $transactionData['paymentName'];
       
    }
     
