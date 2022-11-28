@@ -496,6 +496,8 @@ class WebhookController extends Controller
             $refundStatus = $this->paymentService->getRefundStatus($this->eventData['transaction']['order_no'], $this->orderDetails->orderTotalAmount, $this->eventData['transaction']['refund']['amount']);
             // Set the refund status it Partial or Full refund
             $this->eventData['refund'] = $refundStatus;
+            // Set the payment name
+            $this->eventData['payment_method'] = $this->orderDetails->paymentName;
             // Insert the refund transaction details into Novalnet DB
             $this->paymentService->insertPaymentResponse($this->eventData);
             // Booking Message
@@ -528,6 +530,8 @@ class WebhookController extends Controller
         // Booking Message
         $this->eventData['bookingText'] = $webhookComments;
         $this->eventData['mop'] = $this->orderDetails->mopId;
+        // Set the payment name
+        $this->eventData['payment_method'] = $this->orderDetails->paymentName;
         $orderTotalAmount = $this->orderDetails->orderTotalAmount;
         // Insert the refund details into Novalnet DB
         $this->paymentService->insertPaymentResponse($this->eventData, $this->parentTid, 0, $orderTotalAmount);
