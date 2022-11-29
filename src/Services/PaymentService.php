@@ -1222,6 +1222,7 @@ class PaymentService
    public function getSavedPaymentDetails(&$paymentResponseData) 
    {
        $transactionData = $this->getDatabaseValues($paymentResponseData['transaction']['order_no']);
+       $this->getLogger(__METHOD__)->error('DATA', $transactionData);
        if(in_array($transactionData['paymentName'], ['novalnet_invoice', 'novalnet_guaranteed_invoice', 'novalnet_prepayment'])) {
            $paymentResponseData['transaction']['bank_details']['account_holder'] = $transactionData['invoice_account_holder'];
            $paymentResponseData['transaction']['bank_details']['iban']           = $transactionData['invoice_iban'];
