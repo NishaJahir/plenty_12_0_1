@@ -171,7 +171,7 @@ abstract class NovalnetPaymentAbstract extends PaymentMethodBaseService
      *
      * @return string
      */
-    public function getDescription(string $lang = ''): string
+    public function getDescription(string $lang = 'de'): string
     {
         $paymentMethodKey = str_replace('_','',ucwords(strtolower($this::PAYMENT_KEY),'_'));
         $paymentMethodKey[0] = strtolower($paymentMethodKey[0]);
