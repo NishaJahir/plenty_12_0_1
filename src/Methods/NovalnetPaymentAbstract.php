@@ -178,7 +178,7 @@ abstract class NovalnetPaymentAbstract extends PaymentMethodBaseService
          $this->paymentService->logger('desc', 'Novalnet::Customize.'. $paymentMethodKey .'Desc');
         /** @var Translator $translator */
         $translator = pluginApp(Translator::class);
-        return $translator->trans('Novalnet::Customize.'. $paymentMethodKey .'Desc', [], $lang);
+        return $translator->trans('Novalnet::Customize.'. $paymentMethodKey .'Desc', []);
     }
 
     /**
