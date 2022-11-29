@@ -1234,12 +1234,12 @@ class PaymentService
            $paymentResponsedata['payment_method']                                = $transactionData['paymentName'];
        }
        if($transactionData['paymentName'] == 'novalnet_cashpayment') {
-           $paymentResponsedata['transaction']['nearest_stores'] = $transactionData['store_details'];
-           $paymentResponsedata['transaction']['due_date']       = $transactionData['cp_due_date'];
+           $paymentResponseData['transaction']['nearest_stores'] = $transactionData['store_details'];
+           $paymentResponseData['transaction']['due_date']       = $transactionData['cp_due_date'];
        }
        if($transactionData['paymentName'] == 'novalnet_multibanco') {
-           $paymentResponsedata['transaction']['partner_payment_reference'] = $transactionData['partner_payment_reference'];
-           $paymentResponsedata['transaction']['service_supplier_id']       = $transactionData['service_supplier_id'];
+           $paymentResponseData['transaction']['partner_payment_reference'] = $transactionData['partner_payment_reference'];
+           $paymentResponseData['transaction']['service_supplier_id']       = $transactionData['service_supplier_id'];
        }
       
    }
